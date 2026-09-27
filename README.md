@@ -65,6 +65,17 @@ Start with a preflight and stop before final App Store review submission until I
 
 See the [Claude Code getting-started guide](https://docs.anthropic.com/en/docs/claude-code/getting-started) for installation and authentication.
 
+### Safe mode
+
+For an audit or first pass, explicitly request read-only behavior:
+
+```text
+Run in read-only mode. Inspect the project and App Store Connect state, run preflight checks,
+and produce a plan. Do not upload, publish privacy data, change metadata, or submit for review.
+```
+
+The workflow also requires explicit authorization immediately before final App Store review submission.
+
 ### Other agent tools
 
 The repository also includes small discovery files for agents that do not scan a skills directory automatically:
@@ -83,6 +94,15 @@ Copy this directory into the skills directory used by your Codex installation:
 ```sh
 cp -R ios-app-store-submission "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
+
+From a fresh checkout, the idempotent installer is easier:
+
+```sh
+bash scripts/install.sh codex
+bash scripts/install.sh claude
+```
+
+Use `bash scripts/install.sh project /path/to/app` for a project-local copy under `.agent-skills/`.
 
 If your installation uses a custom skills directory, copy the folder there instead. The required entrypoint is `SKILL.md`; the `agents/openai.yaml` file provides the UI metadata.
 
@@ -126,7 +146,43 @@ references/preflight.md          Signing, archive, runtime, and URL checks
 references/metadata.md           Store fields and review-note guidance
 references/privacy-and-compliance.md
                                  Privacy labels, manifests, and compliance
+references/troubleshooting.md    Common Xcode and App Store Connect failures
+references/status.md             Processing, TestFlight, review, and release states
+app-config.example.yml           Machine-readable release configuration template
+templates/                       Review notes, TestFlight, privacy, and release templates
+examples/                        Native, React Native, Flutter, Capacitor, and Xcode Cloud flows
+scripts/install.sh                Idempotent Codex, Claude Code, or project installer
+scripts/preflight.sh              Conservative project/release preflight checks
+scripts/status.sh                 Local archive and status-monitoring helper
+scripts/validate_repo.py          Cross-platform repository validation
+.github/workflows/validate.yml    Pull-request and push validation
+CHANGELOG.md                      Release history
 ```
+
+## Templates and configuration
+
+Copy [`app-config.example.yml`](app-config.example.yml) to `app-config.yml` and fill in the app's identity, release, distribution, URL, and locale values. Keep credentials, API keys, certificates, and provisioning profiles out of both files.
+
+The [`templates/`](templates/) directory contains starting points for review notes, a TestFlight test plan, and a privacy policy. Replace every bracketed placeholder with facts from the shipped app before using them in App Store Connect.
+
+## Local checks
+
+Run the repository checks before changing the skill:
+
+```sh
+python3 scripts/validate_repo.py
+bash -n scripts/*.sh
+```
+
+Run the app-specific preflight from the app's project root. It is intentionally conservative: warnings require human review, while failures stop the command.
+
+```sh
+/path/to/ios-app-store-submission/scripts/preflight.sh /path/to/your/ios-app
+```
+
+Use [`references/troubleshooting.md`](references/troubleshooting.md) when Xcode or App Store Connect reports a signing, processing, or submission error.
+
+Use `scripts/status.sh /path/to/your/ios-app` to list recent local archives and print the status fields to record from App Store Connect. For authenticated API monitoring, follow [`references/status.md`](references/status.md) and keep all Apple credentials outside the repository.
 
 ## Design boundaries
 

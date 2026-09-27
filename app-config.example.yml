@@ -1,0 +1,30 @@
+# Copy to app-config.yml and fill this out before a release.
+# Do not commit credentials, API keys, certificates, or provisioning profiles.
+app:
+  name: ""
+  bundle_id: ""
+  team_id: ""
+  app_store_id: ""
+  scheme: ""
+  workspace: ""
+  project: ""
+  minimum_ios: ""
+
+release:
+  marketing_version: ""
+  build_number: ""
+  source_commit: ""
+  configuration: Release
+
+distribution:
+  method: app-store
+  testflight_group: ""
+  export_compliance_required: false
+
+urls:
+  privacy_policy: ""
+  support: ""
+  marketing: ""
+
+locales:
+  - en-US
