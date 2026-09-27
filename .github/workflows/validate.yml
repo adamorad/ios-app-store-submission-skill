@@ -10,11 +10,22 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        fixture:
+          - fixtures/native-swift
+          - fixtures/react-native/ios
+          - fixtures/flutter/ios
+          - fixtures/capacitor/ios
     steps:
       - uses: actions/checkout@v4
       - name: Validate repository structure
         run: python3 scripts/validate_repo.py
+      - name: Scan for secrets and signing artifacts
+        run: python3 scripts/scan_secrets.py
       - name: Check shell syntax
         run: bash -n scripts/*.sh
+      - name: Check app preflight fixture
+        run: scripts/preflight.sh "${{ matrix.fixture }}"
       - name: Check whitespace
         run: git diff --check

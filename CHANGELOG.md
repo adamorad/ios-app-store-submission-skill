@@ -10,3 +10,5 @@
 - Added troubleshooting guidance for common Xcode and App Store Connect failures.
 - Added native Swift, React Native, Flutter, Capacitor, and Xcode Cloud examples.
 - Added release-state monitoring guidance and a local archive status helper.
+- Added synthetic project fixtures for CI preflight coverage.
+- Added app-config validation, Markdown release reports, and secret/signing-artifact scanning.

@@ -151,9 +151,13 @@ references/status.md             Processing, TestFlight, review, and release sta
 app-config.example.yml           Machine-readable release configuration template
 templates/                       Review notes, TestFlight, privacy, and release templates
 examples/                        Native, React Native, Flutter, Capacitor, and Xcode Cloud flows
+fixtures/                        Synthetic projects used by CI preflight tests
 scripts/install.sh                Idempotent Codex, Claude Code, or project installer
 scripts/preflight.sh              Conservative project/release preflight checks
 scripts/status.sh                 Local archive and status-monitoring helper
+scripts/validate_config.py        App configuration validator
+scripts/release_report.py         Markdown release-report generator
+scripts/scan_secrets.py           Repository credential and signing-artifact scan
 scripts/validate_repo.py          Cross-platform repository validation
 .github/workflows/validate.yml    Pull-request and push validation
 CHANGELOG.md                      Release history
@@ -183,6 +187,16 @@ Run the app-specific preflight from the app's project root. It is intentionally 
 Use [`references/troubleshooting.md`](references/troubleshooting.md) when Xcode or App Store Connect reports a signing, processing, or submission error.
 
 Use `scripts/status.sh /path/to/your/ios-app` to list recent local archives and print the status fields to record from App Store Connect. For authenticated API monitoring, follow [`references/status.md`](references/status.md) and keep all Apple credentials outside the repository.
+
+Validate a completed configuration and generate a release report:
+
+```sh
+python3 scripts/validate_config.py /path/to/app-config.yml
+python3 scripts/release_report.py /path/to/your/ios-app /path/to/release-report.md
+python3 scripts/scan_secrets.py
+```
+
+The synthetic projects under [`fixtures/`](fixtures/) are used by CI to exercise the preflight logic without requiring Xcode or Apple credentials.
 
 ## Design boundaries
 
