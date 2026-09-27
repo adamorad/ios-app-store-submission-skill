@@ -1,0 +1,4 @@
+interface:
+  display_name: "iOS App Store Submission"
+  short_description: "Prepare and submit iOS apps"
+  default_prompt: "Prepare and submit this iOS app to App Store Connect."
