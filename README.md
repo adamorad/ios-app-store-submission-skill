@@ -2,7 +2,7 @@
 
 An agent skill for preparing, validating, uploading, testing, and submitting iOS apps through App Store Connect.
 
-It covers the work that usually spans Xcode, Apple Developer, App Store Connect, TestFlight, and the app's repository:
+It covers the work that usually spans Xcode, Apple Developer, App Store Connect, TestFlight, and the app's repository. The core instructions are tool-neutral and can be used by Codex, Claude, Gemini, Cursor, and other agents that support the open Agent Skills convention.
 
 - App identity, bundle IDs, versions, build numbers, and release branches
 - Distribution signing and provisioning profiles
@@ -24,6 +24,15 @@ cp -R ios-app-store-submission "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
 If your installation uses a custom skills directory, copy the folder there instead. The required entrypoint is `SKILL.md`; the `agents/openai.yaml` file provides the UI metadata.
+
+### Agent-specific integration
+
+- **Codex:** copy the folder into `$CODEX_HOME/skills/` or `~/.codex/skills/` and invoke `$ios-app-store-submission`.
+- **Claude Code:** copy the folder into `.claude/skills/ios-app-store-submission/` for a project or `~/.claude/skills/ios-app-store-submission/` globally. `CLAUDE.md` points back to the canonical workflow.
+- **Cursor and other instruction-file agents:** copy the folder into the agent's skills directory, or add `SKILL.md` to the project context. `AGENTS.md`, `GEMINI.md`, and `INSTRUCTIONS.md` provide lightweight discovery entrypoints.
+- **Generic runners:** read `INSTRUCTIONS.md` first, then `SKILL.md` and only the relevant reference file.
+
+Do not copy the repository's instruction files into an unrelated application repository unless you want that repository's agent to load this workflow automatically.
 
 ## Use
 
@@ -47,6 +56,10 @@ The skill first identifies the requested app and build, then runs a preflight, p
 
 ```text
 SKILL.md                         Entry point and workflow
+AGENTS.md                        Generic repository-agent entrypoint
+CLAUDE.md                        Claude Code entrypoint
+GEMINI.md                        Gemini entrypoint
+INSTRUCTIONS.md                  Tool-neutral fallback entrypoint
 agents/openai.yaml               Display metadata for skill discovery
 references/preflight.md          Signing, archive, runtime, and URL checks
 references/metadata.md           Store fields and review-note guidance
